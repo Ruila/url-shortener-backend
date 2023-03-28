@@ -4,6 +4,15 @@ import { sequelizeInstance } from "./config/sequelize"
 const app = express()
 const port = 5000
 
+sequelizeInstance
+  .sync({ force: true })
+  .then(() => {
+    console.log("Synced db.")
+  })
+  .catch(err => {
+    console.log("Failed to sync db: " + err.message)
+  })
+
 async function check() {
   try {
     console.info("123")
@@ -15,7 +24,8 @@ async function check() {
 }
 
 app.get("/", async (req, res) => {
-  // const result = await User.findAll()
+  const result = await User.findAll()
+  console.info(result)
   // await check()
   res.send("Hello 123ddcccdWorld!ddd")
 })
