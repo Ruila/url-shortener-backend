@@ -7,4 +7,8 @@ export const ErrorCodeMap = {
     code: 4002,
     msg: "PASSWORD_ERROR",
   },
+  URL_NOT_EXISTED: {
+    code: 4003,
+    msg: "URL_NOT_EXISTED",
+  },
 }

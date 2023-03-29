@@ -1,9 +1,10 @@
 import express from "express"
 import { sequelizeInstance } from "./config/sequelizeInstance"
-const app = express()
-const port = 5000
 import { routerMap } from "./routes"
 import cors from "cors"
+
+const app = express()
+const port = 5000
 
 sequelizeInstance
   .sync()
