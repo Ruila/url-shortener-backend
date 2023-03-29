@@ -5,11 +5,11 @@ import { LoginRequest } from "../types/request/LoginRequest"
 import { ErrorCodeMap } from "../utils/ErrorCodeMap"
 
 export const userController = {
-  getUser: (
+  getUser: async (
     req: express.Request,
     res: express.Response,
     next: express.NextFunction
-  ): void => {
+  ): Promise<void> => {
     try {
       res.status(200).send("getUser")
     } catch (err) {

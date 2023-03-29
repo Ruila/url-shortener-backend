@@ -10,13 +10,13 @@ export const User = sequelizeInstance.define(
       unique: true,
     },
     password: DataTypes.STRING,
-    createdAt: {
-      type: DataTypes.DATEONLY,
+    created_at: {
+      type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW,
     },
-    updatedAt: {
-      type: DataTypes.DATEONLY,
+    updated_at: {
+      type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW,
     },
@@ -24,6 +24,6 @@ export const User = sequelizeInstance.define(
   {
     schema: "public",
     freezeTableName: true,
-    tableName: "accounts",
+    tableName: "users",
   }
 )

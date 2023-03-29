@@ -13,4 +13,9 @@ export const sequelizeInstance = new Sequelize({
     idle: 200000,
     acquire: 1000000,
   },
+  define: {
+    underscored: true,
+    createdAt: "created_at",
+    updatedAt: "updated_at",
+  },
 })

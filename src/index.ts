@@ -4,7 +4,7 @@ const app = express()
 const port = 5000
 import { routerMap } from "./routes"
 sequelizeInstance
-  .sync({ force: true })
+  .sync()
   .then(() => {
     console.log("Synced db.")
   })

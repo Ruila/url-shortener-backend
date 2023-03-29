@@ -7,3 +7,6 @@ CREATE TABLE public.users
     updated_at timestamp(3) without time zone DEFAULT LOCALTIMESTAMP,
     PRIMARY KEY (id)
 );
+
+INSERT INTO public.users (name, password)
+VALUES ('root', 'root');
