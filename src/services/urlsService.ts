@@ -1,4 +1,5 @@
 import { Urls } from "../entity/Urls"
+import crypto from "crypto"
 
 export const urlsService = {
   findExistedShortenUrl: async (
@@ -26,5 +27,8 @@ export const urlsService = {
     } catch (err) {
       console.info("findExistedShortenUrl Error", JSON.stringify(err))
     }
+  },
+  generatedShortenUrl: (): string => {
+    return crypto.randomBytes(5).toString("hex")
   },
 }

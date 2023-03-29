@@ -11,5 +11,3 @@ routerMap.post("/user", userController.signUp)
 
 routerMap.get("/urls", urlsController.getUrls)
 routerMap.post("/url", urlsController.createUrl)
-
-routerMap.get("/:shorten_url", urlsController.redirectUrl)

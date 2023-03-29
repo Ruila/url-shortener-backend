@@ -5,6 +5,8 @@ import { RedirectUrlRequest } from "../types/request/RedirectUrlRequest"
 import { urlsService } from "../services/urlsService"
 import { ErrorCodeMap } from "../utils/ErrorCodeMap"
 
+const baseUrl = "http://localhost:5000/"
+
 export const urlsController = {
   getUrls: async (
     req: express.Request,
@@ -21,12 +23,15 @@ export const urlsController = {
     res: express.Response
   ): Promise<void> => {
     const { shorten_url } = req.params as RedirectUrlRequest
+    console.info("=====redirectUrl======", shorten_url)
     try {
-      const existedUrl = await urlsService.findExistedOriginUrl(shorten_url)
+      const existedUrl = await urlsService.findExistedOriginUrl(
+        baseUrl + shorten_url
+      )
       if (existedUrl) res.status(301).redirect(existedUrl)
       else res.status(417).send(ErrorCodeMap.URL_NOT_EXISTED)
     } catch (err) {
-      res.status(417).send("getUrls errors")
+      res.status(417).send("redirectUrl errors")
     }
   },
   createUrl: async (
@@ -44,9 +49,11 @@ export const urlsController = {
         await Urls.create({
           origin_url,
           created_by,
-          shorten_url: "123",
+          shorten_url: baseUrl + urlsService.generatedShortenUrl(),
         }).then(response => {
-          res.status(200).send(response.get({ plain: true }).shorten_url)
+          res.status(200).send({
+            shorten_url: response.get({ plain: true }).shorten_url,
+          })
         })
       }
     } catch (err) {
