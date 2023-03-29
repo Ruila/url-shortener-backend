@@ -25,8 +25,8 @@ export const userController = {
       await User.create({
         name,
         password,
-      }).then(() => {
-        res.status(200).send("successfully")
+      }).then(response => {
+        res.status(200).send(response.get({ plain: true }))
       })
     } catch (err) {
       res.status(417).send(JSON.stringify(err))

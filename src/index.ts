@@ -3,6 +3,8 @@ import { sequelizeInstance } from "./config/sequelizeInstance"
 const app = express()
 const port = 5000
 import { routerMap } from "./routes"
+import cors from "cors"
+
 sequelizeInstance
   .sync()
   .then(() => {
@@ -12,6 +14,7 @@ sequelizeInstance
     console.log("Failed to sync db: " + err.message)
   })
 
+app.use(cors())
 app.use(express.json())
 app.use("/api", routerMap)
 
