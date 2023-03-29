@@ -11,4 +11,8 @@ export const ErrorCodeMap = {
     code: 4003,
     msg: "URL_NOT_EXISTED",
   },
+  UNAUTHORIZED: {
+    code: 4004,
+    msg: "UNAUTHORIZED",
+  },
 }

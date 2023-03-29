@@ -3,6 +3,7 @@ import { SignUpRequest } from "../types/request/SignUpRequest"
 import { User } from "../entity/User"
 import { LoginRequest } from "../types/request/LoginRequest"
 import { ErrorCodeMap } from "../utils/ErrorCodeMap"
+import { authService } from "../services/authService"
 
 export const userController = {
   getUser: async (
@@ -38,8 +39,12 @@ export const userController = {
       const findUser = await User.findOne({ where: { name: name } })
       if (findUser) {
         const parseData = findUser.get({ plain: true })
-        if (parseData.password === password) res.status(200).send(parseData)
-        else res.status(417).send(ErrorCodeMap.PASSWORD_ERROR)
+        if (parseData.password === password) {
+          const generateToken = authService.generateJWTToken(parseData)
+          res.status(200).send({
+            accessToken: generateToken,
+          })
+        } else res.status(417).send(ErrorCodeMap.PASSWORD_ERROR)
       } else {
         res.status(417).send(ErrorCodeMap.NOT_SIGN_UP_YET)
       }
