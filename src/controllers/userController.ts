@@ -4,6 +4,7 @@ import { User } from "../entity/User"
 import { LoginRequest } from "../types/request/LoginRequest"
 import { ErrorCodeMap } from "../utils/ErrorCodeMap"
 import { authService } from "../services/authService"
+import { UserEntity } from "../types/entity/UserEntity"
 
 export const userController = {
   getUser: async (
@@ -36,12 +37,15 @@ export const userController = {
   login: async (req: express.Request, res: express.Response): Promise<void> => {
     try {
       const { name, password } = req.body as LoginRequest
-      const findUser = await User.findOne({ where: { name: name } })
+      const findUser = (await User.findOne({
+        where: { name: name },
+        raw: true,
+      })) as UserEntity | null
       if (findUser) {
-        const parseData = findUser.get({ plain: true })
-        if (parseData.password === password) {
-          const generateToken = authService.generateJWTToken(parseData)
+        if (findUser.password === password) {
+          const generateToken = authService.generateJWTToken(findUser)
           res.status(200).send({
+            ...findUser,
             accessToken: generateToken,
           })
         } else res.status(417).send(ErrorCodeMap.PASSWORD_ERROR)

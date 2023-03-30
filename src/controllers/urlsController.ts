@@ -12,8 +12,17 @@ export const urlsController = {
     req: express.Request,
     res: express.Response
   ): Promise<void> => {
+    const { user_id } = req.params
     try {
-      res.status(200).send("getUrls")
+      const getUrls = await Urls.findAll({
+        where: { created_by: user_id },
+        raw: true,
+      })
+      if (getUrls) {
+        res.status(200).send(getUrls)
+      } else {
+        res.status(200).send([])
+      }
     } catch (err) {
       res.status(417).send("getUrls errors")
     }

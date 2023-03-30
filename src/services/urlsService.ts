@@ -1,16 +1,19 @@
 import { Urls } from "../entity/Urls"
 import crypto from "crypto"
 import { FindExistedOriginUrlResponse } from "../types/response/FindExistedOriginUrlResponse"
+import { UrlEntity } from "../types/entity/UrlEntity"
 
 export const urlsService = {
   findExistedShortenUrl: async (
     originUrl: string
   ): Promise<string | undefined> => {
     try {
-      const findUrl = await Urls.findOne({ where: { origin_url: originUrl } })
+      const findUrl = (await Urls.findOne({
+        where: { origin_url: originUrl },
+        raw: true,
+      })) as UrlEntity | null
       if (findUrl) {
-        const parseData = findUrl.get({ plain: true })
-        return parseData.shorten_url
+        return findUrl.shorten_url
       } else return undefined
     } catch (err) {
       console.info("findExistedShortenUrl Error", JSON.stringify(err))
@@ -20,12 +23,14 @@ export const urlsService = {
     shortenUrl: string
   ): Promise<FindExistedOriginUrlResponse | undefined> => {
     try {
-      const findUrl = await Urls.findOne({ where: { shorten_url: shortenUrl } })
+      const findUrl = (await Urls.findOne({
+        where: { shorten_url: shortenUrl },
+        raw: true,
+      })) as UrlEntity | null
       if (findUrl) {
-        const parseData = findUrl.get({ plain: true })
         return {
-          origin_url: parseData.origin_url,
-          viewed: parseData.viewed,
+          origin_url: findUrl.origin_url,
+          viewed: findUrl.viewed,
         }
       } else return undefined
     } catch (err) {
