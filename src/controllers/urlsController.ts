@@ -13,10 +13,10 @@ export const urlsController = {
     req: express.Request,
     res: express.Response
   ): Promise<void> => {
-    const { user_id } = req.body as GetUrlsRequest
+    const { userId } = req.body as GetUrlsRequest
     try {
       const getUrls = await Urls.findAll({
-        where: { created_by: user_id },
+        where: { created_by: userId },
         raw: true,
       })
       if (getUrls) {
@@ -58,20 +58,20 @@ export const urlsController = {
     res: express.Response
   ): Promise<void> => {
     try {
-      const { origin_url, created_by } = req.body as CreateShortenUrlRequest
-      const existedUrl = await urlsService.findExistedShortenUrl(origin_url)
+      const { originUrl, createdBy } = req.body as CreateShortenUrlRequest
+      const existedUrl = await urlsService.findExistedShortenUrl(originUrl)
       if (existedUrl) {
         res.status(200).send({
           shorten_url: existedUrl,
         })
       } else {
         await Urls.create({
-          origin_url,
-          created_by,
+          origin_url: originUrl,
+          created_by: createdBy,
           shorten_url: baseUrl + urlsService.generatedShortenUrl(),
         }).then(response => {
           res.status(200).send({
-            shorten_url: response.get({ plain: true }).shorten_url,
+            shortenUrl: response.get({ plain: true }).shorten_url,
           })
         })
       }

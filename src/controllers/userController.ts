@@ -34,7 +34,7 @@ export const userController = {
         if (findUser.password === password) {
           const generateToken = authService.generateJWTToken(findUser)
           res.status(200).send({
-            ...findUser,
+            id: findUser.id,
             accessToken: generateToken,
           })
         } else res.status(417).send(ErrorCodeMap.PASSWORD_ERROR)
