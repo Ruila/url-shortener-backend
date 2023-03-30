@@ -28,8 +28,17 @@ export const urlsController = {
       const existedUrl = await urlsService.findExistedOriginUrl(
         baseUrl + shorten_url
       )
-      if (existedUrl) res.status(301).redirect(existedUrl)
-      else res.status(417).send(ErrorCodeMap.URL_NOT_EXISTED)
+      if (existedUrl) {
+        await Urls.update(
+          {
+            viewed: existedUrl.viewed + 1,
+          },
+          {
+            where: { origin_url: existedUrl.origin_url },
+          }
+        )
+        res.status(301).redirect(existedUrl.origin_url)
+      } else res.status(417).send(ErrorCodeMap.URL_NOT_EXISTED)
     } catch (err) {
       res.status(417).send("redirectUrl errors")
     }

@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize"
 import { sequelizeInstance } from "../config/sequelizeInstance"
-
 export const Urls = sequelizeInstance.define(
   "Urls",
   {
@@ -17,6 +16,11 @@ export const Urls = sequelizeInstance.define(
     created_by: {
       type: DataTypes.NUMBER,
       allowNull: false,
+      unique: false,
+    },
+    viewed: {
+      type: DataTypes.NUMBER,
+      allowNull: true,
       unique: false,
     },
     created_at: {

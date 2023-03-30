@@ -1,5 +1,6 @@
 import { Urls } from "../entity/Urls"
 import crypto from "crypto"
+import { FindExistedOriginUrlResponse } from "../types/response/FindExistedOriginUrlResponse"
 
 export const urlsService = {
   findExistedShortenUrl: async (
@@ -17,12 +18,15 @@ export const urlsService = {
   },
   findExistedOriginUrl: async (
     shortenUrl: string
-  ): Promise<string | undefined> => {
+  ): Promise<FindExistedOriginUrlResponse | undefined> => {
     try {
       const findUrl = await Urls.findOne({ where: { shorten_url: shortenUrl } })
       if (findUrl) {
         const parseData = findUrl.get({ plain: true })
-        return parseData.origin_url
+        return {
+          origin_url: parseData.origin_url,
+          viewed: parseData.viewed,
+        }
       } else return undefined
     } catch (err) {
       console.info("findExistedShortenUrl Error", JSON.stringify(err))
