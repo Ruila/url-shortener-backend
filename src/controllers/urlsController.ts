@@ -4,6 +4,7 @@ import { CreateShortenUrlRequest } from "../types/request/CreateShortenUrlReques
 import { RedirectUrlRequest } from "../types/request/RedirectUrlRequest"
 import { urlsService } from "../services/urlsService"
 import { ErrorCodeMap } from "../utils/ErrorCodeMap"
+import { GetUrlsRequest } from "../types/request/GetUrlsRequest"
 
 const baseUrl = "http://localhost:5000/"
 
@@ -12,7 +13,7 @@ export const urlsController = {
     req: express.Request,
     res: express.Response
   ): Promise<void> => {
-    const { user_id } = req.params
+    const { user_id } = req.body as GetUrlsRequest
     try {
       const getUrls = await Urls.findAll({
         where: { created_by: user_id },

@@ -7,17 +7,6 @@ import { authService } from "../services/authService"
 import { UserEntity } from "../types/entity/UserEntity"
 
 export const userController = {
-  getUser: async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ): Promise<void> => {
-    try {
-      res.status(200).send("getUser")
-    } catch (err) {
-      next(err)
-    }
-  },
   signUp: async (
     req: express.Request,
     res: express.Response
