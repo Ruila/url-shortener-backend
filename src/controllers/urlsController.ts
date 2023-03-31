@@ -6,6 +6,7 @@ import { urlsService } from "../services/urlsService"
 import { ErrorCodeMap } from "../utils/ErrorCodeMap"
 import { GetUrlsRequest } from "../types/request/GetUrlsRequest"
 import { DeleteShortenUrlRequest } from "../types/request/DeleteShortenUrlRequest"
+import { verifyUrl } from "../utils/verifyUrl"
 
 const baseUrl = "http://localhost:5000/"
 
@@ -57,9 +58,12 @@ export const urlsController = {
   createUrl: async (
     req: express.Request,
     res: express.Response
-  ): Promise<void> => {
+  ): Promise<void | express.Response> => {
     try {
       const { originUrl, createdBy } = req.body as CreateShortenUrlRequest
+      if (!verifyUrl(originUrl)) {
+        return res.status(417).send(ErrorCodeMap.INVALID_URL)
+      }
       const existedUrl = await urlsService.findExistedShortenUrl(originUrl)
       if (existedUrl) {
         res.status(200).send({
