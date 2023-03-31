@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize"
-import { sequelizeInstance } from "../config/sequelizeInstance"
+import { sequelizeInstance } from "../db/sequelizeInstance"
 export const Urls = sequelizeInstance.define(
   "Urls",
   {

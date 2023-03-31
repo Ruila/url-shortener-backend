@@ -1,8 +1,9 @@
 import express from "express"
-import { sequelizeInstance } from "./config/sequelizeInstance"
+import { sequelizeInstance } from "./db/sequelizeInstance"
 import { routerMap } from "./routes"
 import cors from "cors"
 import { urlsController } from "./controllers/urlsController"
+import { runRedis } from "./db/redis"
 
 const app = express()
 const port = 5000
@@ -16,12 +17,14 @@ sequelizeInstance
     console.log("Failed to sync db: " + err.message)
   })
 
+runRedis()
+
 app.use(cors())
 app.use(express.json())
 app.use("/api", routerMap)
 
 app.get("/", async (req, res) => {
-  res.send("Hello 123ddcccdWorld!ddd")
+  res.send("Hello World!!")
 })
 
 app.get("/:shorten_url", urlsController.redirectUrl)

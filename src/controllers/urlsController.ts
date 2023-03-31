@@ -35,7 +35,6 @@ export const urlsController = {
     res: express.Response
   ): Promise<void> => {
     const { shorten_url } = req.params as RedirectUrlRequest
-    console.info("=====redirectUrl======", shorten_url)
     try {
       const existedUrl = await urlsService.findExistedOriginUrl(
         baseUrl + shorten_url

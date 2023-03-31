@@ -8,8 +8,7 @@ export const authService = {
   },
   verifyJWTToken: (token: string): boolean => {
     try {
-      const decoded = jwt.verify(token, secretKey)
-      console.info("decode result", decoded)
+      jwt.verify(token, secretKey)
       return true
     } catch (err) {
       console.log("verify error", err)
