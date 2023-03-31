@@ -10,3 +10,4 @@ routerMap.post("/user", userController.signUp)
 
 routerMap.post("/urls", authenticated, urlsController.getUrls)
 routerMap.post("/url", authenticated, urlsController.createUrl)
+routerMap.delete("/url/:urlId", authenticated, urlsController.deleteUrl)

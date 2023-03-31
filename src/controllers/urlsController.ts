@@ -5,6 +5,7 @@ import { RedirectUrlRequest } from "../types/request/RedirectUrlRequest"
 import { urlsService } from "../services/urlsService"
 import { ErrorCodeMap } from "../utils/ErrorCodeMap"
 import { GetUrlsRequest } from "../types/request/GetUrlsRequest"
+import { DeleteShortenUrlRequest } from "../types/request/DeleteShortenUrlRequest"
 
 const baseUrl = "http://localhost:5000/"
 
@@ -75,6 +76,24 @@ export const urlsController = {
           })
         })
       }
+    } catch (err) {
+      res.status(417).send(JSON.stringify(err))
+    }
+  },
+  deleteUrl: async (
+    req: express.Request,
+    res: express.Response
+  ): Promise<void> => {
+    try {
+      const { urlId } = req.params as DeleteShortenUrlRequest
+      await Urls.destroy({
+        where: { id: urlId },
+      }).then(response => {
+        console.info("delete", response)
+        res.status(200).send({
+          msg: "delete successfully",
+        })
+      })
     } catch (err) {
       res.status(417).send(JSON.stringify(err))
     }
