@@ -62,7 +62,7 @@ export const urlsController = {
       const existedUrl = await urlsService.findExistedShortenUrl(originUrl)
       if (existedUrl) {
         res.status(200).send({
-          shorten_url: existedUrl,
+          shortenUrl: existedUrl,
         })
       } else {
         await Urls.create({

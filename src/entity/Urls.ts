@@ -11,7 +11,7 @@ export const Urls = sequelizeInstance.define(
     origin_url: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: false,
+      unique: true,
     },
     created_by: {
       type: DataTypes.NUMBER,
