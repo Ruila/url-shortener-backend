@@ -7,6 +7,7 @@ import { ErrorCodeMap } from "../utils/ErrorCodeMap"
 import { GetUrlsRequest } from "../types/request/GetUrlsRequest"
 import { DeleteShortenUrlRequest } from "../types/request/DeleteShortenUrlRequest"
 import { verifyUrl } from "../utils/verifyUrl"
+import { redisClient } from "../db/redis"
 
 const baseUrl = "http://localhost:5000/"
 
@@ -33,21 +34,31 @@ export const urlsController = {
   redirectUrl: async (
     req: express.Request,
     res: express.Response
-  ): Promise<void> => {
+  ): Promise<void | express.Response> => {
     const { shorten_url } = req.params as RedirectUrlRequest
     try {
+      const findUrlInCache = await redisClient.get(`url:${shorten_url}`)
+      console.info("=====findInCache=======", findUrlInCache)
+      if (findUrlInCache) {
+        const getViewed =
+          Number(await redisClient.get(`url:${shorten_url}:viewed`)) + 1
+        await redisClient.set(`url:${shorten_url}:viewed`, getViewed)
+        return res.status(301).redirect(findUrlInCache)
+      }
       const existedUrl = await urlsService.findExistedOriginUrl(
         baseUrl + shorten_url
       )
       if (existedUrl) {
-        await Urls.update(
-          {
-            viewed: existedUrl.viewed + 1,
-          },
-          {
-            where: { origin_url: existedUrl.origin_url },
-          }
+        await urlsService.updateViewedCount(
+          existedUrl.origin_url,
+          existedUrl.viewed + 1
         )
+        await redisClient.setEx(`url:${shorten_url}`, 15, existedUrl.origin_url)
+        await redisClient.set(
+          `url:${shorten_url}:viewed`,
+          existedUrl.viewed + 1
+        )
+        await redisClient.set(`shadow:${shorten_url}`, existedUrl.origin_url)
         res.status(301).redirect(existedUrl.origin_url)
       } else res.status(417).send(ErrorCodeMap.URL_NOT_EXISTED)
     } catch (err) {
